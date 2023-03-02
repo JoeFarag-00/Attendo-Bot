@@ -8,12 +8,7 @@ You can find the tutorial about building a discord bot [here](https://www.youtub
 
 * [Requirements](#requirements)
 * [Getting started](#getting-started)
-* [Docker](#docker)
 * [Features & Commands](#features--commands)
-* [Common errors](#common-errors)
-* [Contributing](#contributing)
-* [Author](#author)
-* [License](#license)
 
 ## Requirements
 
