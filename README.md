@@ -50,8 +50,12 @@ After cloning the project and installing all dependencies, you need to add your 
 You can change the status of your discord bot by editing the `activity` and `activityType` variables inside of the `config.json` file. `activityType` needs to be set to an integer with the following [options](https://discord-api-types.dev/api/discord-api-types-v10/enum/ActivityType).
 
 ### Deploying commands
-AttendLink: "Link" , "Member"
+1. AttendLink: "Link" , "Member"
 
-You can also use "All" as a member to add the attendance for all pre-recorded users.
+   You can also use "All" as a member to add the attendance for all pre-recorded users.
 
-<img src="./TestAssets/Attend.png">
+   <img src="./TestAssets/Attend.png">
+
+2. Using QR code from Image
+
+   <img src="./TestAssets/QRTest.png">
