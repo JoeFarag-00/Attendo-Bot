@@ -2,6 +2,7 @@ import discord
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.chrome.options import Options  
 import time
 import os
 import cv2
@@ -9,16 +10,18 @@ import qrcode
 from Response import get_response
 import random
 
+chrome_options = Options()  
+chrome_options.add_argument("--headless")  
 
 intents = discord.Intents.default()
 intents.message_content = True
 client = discord.Client(intents=intents)
 
 attendees = {
-    "1": {"username": "211777", "password": "ergerg"},
-    "2": {"username": "213009", "password": "ergerg"},
-    "3": {"username": "210439", "password": "3ergerg"},
-    "4": {"username": "user3", "password": "pass3"},
+    "Youssef": {"username": "211777", "password": "Yo234SFssefs"},
+    "Marzouki": {"username": "213009", "password": "@sfsFSEF"},
+    "Hubos": {"username": "210439", "password": "sFSF"},
+    # "Mina": {"username": "212257", "password": "pass3"},
 }
 
 @client.event
@@ -59,8 +62,11 @@ async def on_message(message):
                         for attendee in attendees:
                             driver = webdriver.Chrome()
                             driver.get(link)
-                            continue_button = driver.find_element("xpath","//input[@value='Continue']")
-                            continue_button.click()
+                            try:
+                                continue_button = driver.find_element("xpath","//input[@value='Continue']")
+                                continue_button.click()
+                            except NoSuchElementException:
+                                print("Continue Exception Handled")
                             username = attendees[attendee]["username"]
                             password = attendees[attendee]["password"]
                             username_field = driver.find_element("name",'username')
@@ -76,9 +82,13 @@ async def on_message(message):
                     else:
                         driver = webdriver.Chrome()
                         driver.get(link)          
-                        time.sleep(3)
-                        continue_button = driver.find_element("xpath","//input[@value='Continue']")
-                        continue_button.click()
+                        # time.sleep(3)
+                        try:
+                            continue_button = driver.find_element("xpath","//input[@value='Continue']")
+                            continue_button.click()
+                        except NoSuchElementException:
+                            print("Continue Exception Handled")
+                            
                         username = attendees[member]["username"]
                         password = attendees[member]["password"]
                         username_field = driver.find_element("name",'username')
@@ -96,7 +106,7 @@ async def on_message(message):
                         if member == "Marzouki":
                             member = member + " 🥚🥚"
                         try:
-                            await message.channel.send("Attendance submitted for " + member)
+                            await message.channel.send("Attendance submitted for " + member + ", Thank You ❤️")
                         except NoSuchElementException:
                             await message.channel.send("Couldn't submit attendance for " + member)
                         
@@ -116,8 +126,12 @@ async def on_message(message):
             for attendee in attendees:
                 driver = webdriver.Chrome()
                 driver.get(link)
-                continue_button = driver.find_element("xpath","//input[@value='Continue']")
-                continue_button.click()
+                try:
+                    continue_button = driver.find_element("xpath","//input[@value='Continue']")
+                    continue_button.click()
+                except NoSuchElementException:
+                    print("Continue Exception Handled")
+                    
                 username = attendees[attendee]["username"]
                 password = attendees[attendee]["password"]
                 username_field = driver.find_element("name",'username')
@@ -134,8 +148,11 @@ async def on_message(message):
             driver = webdriver.Chrome()
             driver.get(link)          
             time.sleep(3)
-            continue_button = driver.find_element("xpath","//input[@value='Continue']")
-            continue_button.click()
+            try:
+                continue_button = driver.find_element("xpath","//input[@value='Continue']")
+                continue_button.click()
+            except NoSuchElementException:
+                print("Continue Exception Handled")
             username = attendees[member]["username"]
             password = attendees[member]["password"]
             username_field = driver.find_element("name",'username')
@@ -153,7 +170,8 @@ async def on_message(message):
             if member == "Marzouki":
                 member = member + " 🥚🥚"
             try:
-                await message.channel.send("Attendance submitted for " + member)
+                verify = driver.find_element("name",'This session is not currently available for self-marking')
+                await message.channel.send("Attendance submitted for " + member + ", Thank You ❤️")
             except NoSuchElementException:
                 await message.channel.send("Couldn't submit attendance for " + member)
             
@@ -165,4 +183,4 @@ async def on_message(message):
             await message.channel.send(response)
           
             
-client.run('use ur own')
+client.run('uSE UR OWN')
