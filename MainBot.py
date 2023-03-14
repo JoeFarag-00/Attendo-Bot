@@ -18,10 +18,10 @@ intents.message_content = True
 client = discord.Client(intents=intents)
 
 attendees = {
-    "Youssef": {"username": "211777", "password": "REGEERG"},
-    "Marzouki": {"username": "213009", "password": "ERGERG9"},
-    "Hubos": {"username": "210439", "password": "3GERGEGaRG!"},
-    # "Mina": {"username": "212257", "password": "pass3"},
+    "Joe": {"username": "234234", "password": "REGEERG"},
+    "user2": {"username": "234423", "password": "ERGERG9"},
+    "helo": {"username": "234342", "password": "3GERGEGaRG!"},
+    # "dmada": {"username": "23423423", "password": "pass3"},
 }
 
 @client.event
