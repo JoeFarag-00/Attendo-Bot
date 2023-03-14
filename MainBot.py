@@ -19,7 +19,7 @@ client = discord.Client(intents=intents)
 
 attendees = {
     "Joe": {"username": "234234", "password": "REGEERG"},
-    "user2": {"username": "234423", "password": "ERGERG9"},
+    "user2": {"username": "2344423", "password": "ERGERG9"},
     "helo": {"username": "234342", "password": "3GERGEGaRG!"},
     # "dmada": {"username": "23423423", "password": "pass3"},
 }
