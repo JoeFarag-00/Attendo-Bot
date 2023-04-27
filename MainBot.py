@@ -28,9 +28,9 @@ attendees = {
 async def on_message(message):
     if message.author == client.user:
         return
-        
+       
     if len(message.attachments) > 0:
-        download_path = r"YOUR PATH"
+        download_path = r"C:\Users\youss\Desktop\My Crap\Geek Mode\Projects\Coding Projects\My Personal Projects\Automation Projects\Auto-Attendance Recorder\QRDumpFile"
         os.makedirs(download_path, exist_ok=True)
         for file_name in os.listdir(download_path):
             file_path = os.path.join(download_path, file_name)
@@ -54,12 +54,13 @@ async def on_message(message):
                 link = data
                 member = message.content
                 if member != "":
-                    notify = "Attendance Link: " + link + " For " + member + "\n \nPLEASE CONFIRM IF THE LINK IS CORRECT, If so, please wait, Im adding your attendance..."
+                    notify = "Attendance Link: " + link + " For " + member + "\n \nPLEASE CHECK IF THE LINK GENERATED IS CORRECT, If so, please wait, Im adding your attendance..."
                     await message.channel.send(notify)
                     print("Member: ",member)
                     print("link: " ,link)
                     #AddAttendance(link,member)
                     attendct = 0
+                    NaughtyList = []
                     ConfirmList = []
                     AllList = []
 
@@ -68,7 +69,7 @@ async def on_message(message):
                     
                     ConfirmAll = ', '.join(AllList)
 
-                    if member == "All":
+                    if member == "All" or member == "all":
                         for attendee in attendees:
                             try:
                                 driver = webdriver.Chrome()
@@ -87,18 +88,22 @@ async def on_message(message):
                                 login_button = driver.find_element("xpath","//input[@value='Log in']")
                                 login_button.click()
                                 time.sleep(3)
-                                driver.close()
-
-                                attendct+=1
-                                ConfirmList.append(attendee)
-                                if(len(attendees) == attendct):
-                                    await message.channel.send("Attendance submitted for All Members: " + ConfirmAll)
+                                if not driver.find_elements(By.ID, "loginerrormessage"):
+                                    attendct+=1
+                                    ConfirmList.append(attendee)
+                                else:
+                                    NaughtyList.append(attendee)
+                                
+                                driver.close()  
 
                             except NoSuchElementException:
-                                await message.channel.send("Couldn't Submit Attendance For " + attendee)
-                                
-                        if(len(attendees) != attendct):
-                            await message.channel.send("Attendance submitted for ONLY:" + ConfirmList)                            
+                                pass
+                            
+                        if(len(attendees) == attendct):
+                            await message.channel.send("Attendance submitted for All Members: " + ConfirmAll)
+                        else:
+                            await message.channel.send("Attendance submitted for ONLY:" + str(ConfirmList))
+                            await message.channel.send("Couldn't Submit Attendance For " + str(NaughtyList))                           
                                 
                     elif member in attendees:
                         try:
@@ -128,32 +133,40 @@ async def on_message(message):
                             if member == "Marzouki":
                                 member = member + " 🥚🥚"
 
-                            await message.channel.send("Attendance submitted for " + member + ", Thank You ❤️")
+                            if not driver.find_elements(By.ID, "loginerrormessage"):    # verify = driver.find_element("name",'This session is not currently available for self-marking')
+                                await message.channel.send("Attendance submitted for " + member + ", Thank You ❤️")
+                            else:
+                                await message.channel.send("Couldn't Submit Attendance For " + member)
+                                
                         except NoSuchElementException:
                             await message.channel.send("Couldn't submit attendance for " + member)
                         
                         driver.close()
                     else:
-                        await message.channel.send(member + " Does Not Exist, Use 'List Members' Command")
+                        notify = ["Are you fucking Dumb? enter the correct name, use 'List Members' if you forgot.","Fucking Moron, add the correct guy, use 'List Members' if you forgot your friend's name.","Add the correct name of the guy u want to submit the attendance for, use 'List Members' ", "please add the correct person you want to set attendance, use 'List Members'"]
+                        await message.channel.send(member + " Does Not Exist")
+                        await message.channel.send(notify[random.randint(0,3)])
                         
                 elif member == "" :
                     notify = ["Are you fucking Dumb","Fucking Moron, add the guy","Add the fucking guy u want to submit the attendance for, reupload the image.", "please add the person you want to set attendance for with the image."]
                     await message.channel.send(notify[random.randint(0,3)])
-
+                    
             else:
-                await message.channel.send("Attendance Link NOT Detected or wrong, need a CLEAR IMAGE BITCH") 
-                
+                await message.channel.send("Attendance Link NOT Detected or wrong, need a CLEAR IMAGE BITCH")
+               
     elif message.content.startswith('AL:'):
         link = message.content.split(',')[0].split(': ')[1].strip()
         member = message.content.split(',')[1].strip()
         #AddAttendance(link,member)
+        attendct = 0
+        NaughtyList = []
         ConfirmList = []
         AllList = []
         for CAttendee in attendees.keys():
             AllList.append(CAttendee)
         ConfirmAll = ', '.join(AllList)
 
-        if member == "All":
+        if member == "All" or member == "all":
             for attendee in attendees:
                 try:
                     driver = webdriver.Chrome()
@@ -172,18 +185,23 @@ async def on_message(message):
                     login_button = driver.find_element("xpath","//input[@value='Log in']")
                     login_button.click()
                     time.sleep(3)
-                    driver.close()
-
-                    attendct+=1
-                    ConfirmList.append(attendee)
-                    if(len(attendees) == attendct):
-                        await message.channel.send("Attendance submitted for All Members: " + ConfirmAll)
+                     
+                    if not driver.find_elements(By.ID, "loginerrormessage"):
+                        attendct+=1
+                        ConfirmList.append(attendee)
+                    else:
+                        NaughtyList.append(attendee)
+                    
+                    driver.close()  
 
                 except NoSuchElementException:
-                    await message.channel.send("Couldn't Submit Attendance For " + attendee)
-                    
-            if(len(attendees) != attendct):
-                await message.channel.send("Attendance submitted for ONLY:" + ConfirmList)                            
+                    pass
+                
+            if(len(attendees) == attendct):
+                await message.channel.send("Attendance submitted for All Members: " + ConfirmAll)
+            else:
+                await message.channel.send("Attendance submitted for ONLY:" + str(ConfirmList))
+                await message.channel.send("Couldn't Submit Attendance For " + str(NaughtyList))                        
                                 
         elif member in attendees:
             try:
@@ -210,23 +228,29 @@ async def on_message(message):
                     member = member + " Wese5"
                 if member == "Marzouki":
                     member = member + "🥚🥚"
-
-                # verify = driver.find_element("name",'This session is not currently available for self-marking')
-                await message.channel.send("Attendance submitted for " + member + ", Thank You ❤️")
+                if member == "Pola":
+                    member = member + "🚲"
+            
+                if not driver.find_elements(By.ID, "loginerrormessage"):    # verify = driver.find_element("name",'This session is not currently available for self-marking')
+                    await message.channel.send("Attendance submitted for " + member + ", Thank You ❤️")
+                else:
+                    await message.channel.send("Couldn't Submit Attendance For " + member)
+                    
             except NoSuchElementException:
                 await message.channel.send("Couldn't Submit Attendance For " + member)
             driver.close()  
             
         elif member == "" :
-            notify = ["Are you fucking Dumb","Fucking Moron, add the guy","Add the fucking guy u want to submit the attendance for, reupload the image.", "please add the person you want to set attendance for with the image."]
+            notify = ["Are you fucking Dumb? resend the command with the name of the person.","Fucking Moron, add the guy. ","Add the fucking guy u want to submit the attendance for, then resend the message, use 'List Members' if you forgot your friend's name.", "Please add the person you want to set attendance for with the link, use use 'List Members'."]
             await message.channel.send(notify[random.randint(0,3)])
         else:
-            await message.channel.send(member + " Does Not Exist, Use 'List Members' Command")
+            notify = ["Are you fucking Dumb? enter the correct name, use 'List Members' if you forgot.","Fucking Moron, add the correct guy, use 'List Members' if you forgot your friend's name.","Add the correct name of the guy u want to submit the attendance for, use 'List Members' ", "please add the correct person you want to set attendance, use 'List Members'"]
+            await message.channel.send(member + " Does Not Exist")
+            await message.channel.send(notify[random.randint(0,3)])
     
     else:
         response = get_response(message.content, attendees)
         if response:
             await message.channel.send(response)
-          
-            
+           
 client.run('use ur own API')
